@@ -15,7 +15,7 @@ pipeline {
                                 spec:
                                     containers:
                                     - name: node-builder
-                                    image: node:20
+                                      image: node:20
                 """) {
                     node(POD_LABEL) {
                         container('node-builder') {

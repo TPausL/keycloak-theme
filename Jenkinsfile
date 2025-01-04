@@ -1,11 +1,6 @@
 @Library("teckdigital") _
 def appName = "keycloak-theme"
 pipeline {
-    agent {
-    kubernetes {
-        inheritFrom "kaniko-template"
-    }
-  }
     stages {
         stage('Build Jar') {
             steps {

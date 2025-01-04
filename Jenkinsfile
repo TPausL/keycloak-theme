@@ -17,10 +17,12 @@ pipeline {
                                     - name: node-builder
                                     image: node:20
                 """) {
-                    container('node-builder') {
-                        script {
-                            sh 'npm install'
-                            sh 'npm run build-keycloak-theme'
+                    node(POD_LABEL) {
+                        container('node-builder') {
+                            script {
+                                sh 'npm install'
+                                sh 'npm run build-keycloak-theme'
+                            }
                         }
                     }
                 }

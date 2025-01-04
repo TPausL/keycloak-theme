@@ -56,7 +56,7 @@ pipeline {
                             def valuesPath = 'core/keycloak/values.yaml'
 
                             def fileName = 'timos-keycloak-theme'
-                            sh "sed -E 's|(${fileName}\\.jar.*\\/download\\/)([^/]+)(\\/.*)|\\1${releaseTag}\\3|g'"
+                            sh "sed -i -E 's|(${fileName}\\.jar.*\\/download\\/)([^/]+)(\\/.*)|\\1${releaseTag}\\3|g' ${valuesPath}"
 
                             hasDiff = sh script: 'git diff --quiet HEAD', returnStatus: true
 

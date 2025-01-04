@@ -11,6 +11,7 @@ pipeline {
             steps {
                 container('node') {
                     script {
+                        sh 'pwd'
                         sh 'apt update'
                         sh 'apt install -y maven'
                         sh 'npm install'
@@ -23,6 +24,7 @@ pipeline {
             steps {
                 container('node') {
                     script {
+                        sh 'pwd'
                         createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
                         uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],

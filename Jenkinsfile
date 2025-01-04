@@ -10,9 +10,10 @@ pipeline {
         stage('Build Jar') {
             steps {
                 container('node') {
-                    def test = createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
-                    echo test
                     script {
+                        def test = createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
+                        echo test
+
                         sh 'apt update'
                         sh 'apt install -y maven'
                         sh 'npm install'

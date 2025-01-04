@@ -12,7 +12,7 @@ pipeline {
                 container('node') {
                     script {
                         sh 'apt update'
-                        sh 'apt install -y mvn'
+                        sh 'apt install -y maven'
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'
                     }

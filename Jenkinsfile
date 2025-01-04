@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Build Jar') {
             steps {
-                container('node-builder') {
+                container('node') {
                     script {
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'

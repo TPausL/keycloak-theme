@@ -11,9 +11,6 @@ pipeline {
             steps {
                 container('node') {
                     script {
-                        def test = createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
-                        echo String.valueOf(test.id)
-
                         sh 'apt update'
                         sh 'apt install -y maven'
                         sh 'npm install'
@@ -26,12 +23,13 @@ pipeline {
             steps {
                 container('node') {
                     script {
-                        def test = createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
-                        echo test
-                        uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
-                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
-                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']
-                        ], tagName: env.GIT_COMMIT.take(7))
+                        def repo = 'tpausl/keycloak-theme'
+                        def release = createGitHubRelease(credentialId: 'tpausl-github-token', repository: repo, tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
+                        def releaseId = String.valueOf(release.id)
+                        withCredentials([string(credentialsId: 'tpausl-github-token', variable: 'GITHUB_TOKEN')]) {
+                            sh "curl -XPOST -H \"Authorization:token ${GITHUB_TOKEN}\" -H \"Content-Type:application/octet-stream\" --data-binary @dist_keycloak/keycloak-theme-for-kc-22-to-25.jar https://uploads.github.com/repos/${repo}/releases/${releaseId}/assets?name=keycloak-theme-for-kc-22-to-25.jar"
+                            sh "curl -XPOST -H \"Authorization:token ${GITHUB_TOKEN}\" -H \"Content-Type:application/octet-stream\" --data-binary @dist_keycloak/keycloak-theme-for-kc-all-other-versions https://uploads.github.com/repos/${repo}/releases/${releaseId}/assets?name=keycloak-theme-for-kc-all-other-versions"
+                        }
                     }
                 }
             }

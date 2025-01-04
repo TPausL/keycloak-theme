@@ -7,7 +7,7 @@ pipeline {
         }
     }
     stages {
-        stage('Build Jar') {
+        stage('Build and release Jar') {
             steps {
                 container('node') {
                     script {
@@ -16,15 +16,7 @@ pipeline {
                         sh 'apt install -y maven'
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'
-                    }
-                }
-            }
-        }
-        stage('Create release') {
-            steps {
-                container('node') {
-                    script {
-                        sh 'pwd'
+
                         createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
                         uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],

@@ -19,5 +19,18 @@ pipeline {
                 }
             }
         }
+        stage('Create release') {
+            steps {
+                container('node') {
+                    script {
+                        createGithubRelease(credentialsId: 'tpausl-github-token', repo: 'tpausl/keycloak-theme')
+                        uploadGithubReleaseAsset(credentialsId: 'tpausl-github-token', repo: 'tpausl/keycloak-theme', uploadAssets: [
+                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
+                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']
+                        ])
+                    }
+                }
+            }
+        }
     }
 }

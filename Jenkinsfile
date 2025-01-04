@@ -24,7 +24,7 @@ pipeline {
                 container('node') {
                     script {
                         createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
-                        uploadGitHubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
+                        uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']
                         ], tagName: env.GIT_COMMIT.take(7))

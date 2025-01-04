@@ -7,21 +7,34 @@ pipeline {
         }
     }
     stages {
-        stage('Build and release Jar') {
+        stage('Build Jar') {
             steps {
                 container('node') {
                     script {
-                        sh 'pwd'
+                        def releases = listGitHubReleases(
+                            credentialId: 'tpausl-github-token',
+                            includeDrafts: false,
+                            repository: 'tpausl/keycloak-theme'
+                        )
+
+                        echo releases
+
                         sh 'apt update'
                         sh 'apt install -y maven'
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'
-                        sh 'ls -la'
-                        sh 'ls -la dist_keycloak'
+                    }
+                }
+            }
+        }
+        stage('Create release') {
+            steps {
+                container('node') {
+                    script {
                         createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
                         uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
-                            [filePath: "${env.WORKSPACE}/dist_keycloak/keycloak-theme-for-kc-22-to-25.jar"],
-                            [filePath:  "${env.WORKSPACE}/dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar"]
+                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
+                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']
                         ], tagName: env.GIT_COMMIT.take(7))
                     }
                 }

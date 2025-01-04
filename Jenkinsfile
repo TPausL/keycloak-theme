@@ -16,11 +16,12 @@ pipeline {
                         sh 'apt install -y maven'
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'
-
+                        sh 'ls -la'
+                        sh 'ls -la dist_keycloak'
                         createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
                         uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
-                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
-                            [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']
+                            [filePath: "${env.WORKSPACE}/dist_keycloak/keycloak-theme-for-kc-22-to-25.jar"],
+                            [filePath:  "${env.WORKSPACE}/dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar"]
                         ], tagName: env.GIT_COMMIT.take(7))
                     }
                 }

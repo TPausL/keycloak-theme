@@ -11,6 +11,7 @@ pipeline {
             steps {
                 container('node') {
                     script {
+                        sh 'apt update'
                         sh 'apt install -y mvn'
                         sh 'npm install'
                         sh 'npm run build-keycloak-theme'

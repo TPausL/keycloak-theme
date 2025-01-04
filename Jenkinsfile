@@ -11,14 +11,6 @@ pipeline {
             steps {
                 container('node') {
                     script {
-                        def releases = listGitHubReleases(
-                            credentialId: 'tpausl-github-token',
-                            includeDrafts: false,
-                            repository: 'tpausl/keycloak-theme'
-                        )
-
-                        echo releases
-
                         sh 'apt update'
                         sh 'apt install -y maven'
                         sh 'npm install'
@@ -31,7 +23,8 @@ pipeline {
             steps {
                 container('node') {
                     script {
-                        createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
+                        def test = createGitHubRelease(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', tag: env.GIT_COMMIT.take(7), commitish: env.GIT_COMMIT)
+                        echo test
                         uploadGithubReleaseAsset(credentialId: 'tpausl-github-token', repository: 'tpausl/keycloak-theme', uploadAssets: [
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-22-to-25.jar'],
                             [filePath: 'dist_keycloak/keycloak-theme-for-kc-all-other-versions.jar']

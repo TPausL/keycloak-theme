@@ -9,7 +9,7 @@ import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import { Dropdown } from "primereact/dropdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { Message } from "primereact/message";
+import { Message, MessageProps } from "primereact/message";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -62,7 +62,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         );
     };
 
-    const convertToSeverity = (type: string) => {
+    const convertToSeverity = (type: string): MessageProps["severity"] => {
         switch (type) {
             case "success":
                 return "success";
@@ -73,7 +73,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             case "info":
                 return "info";
             default:
-                return "";
+                return undefined;
         }
     };
 

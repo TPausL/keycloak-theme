@@ -66,29 +66,32 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             <hr />
                             <h2 className="text-sm font-light text-center">{msg("identity-provider-login-label")}</h2>
                             <div className="flex w-full flex-wrap gap-3">
-                                {social.providers.map((...[p, , _providers]) => (
-                                    <Button
-                                        icon={p.iconClasses}
-                                        severity="danger"
-                                        type="button"
-                                        onClick={() => window.location.replace("/" + p.loginUrl)}
-                                        key={p.alias}
-                                        id={`social-${p.alias}`}
-                                        className="basis-2/5 shrink-0 grow text-[rgb(100,116,139)] justify-center"
-                                        label={kcSanitize(p.displayName)}
-                                        text
-                                        raised
-                                        iconPos="left"
-                                        pt={{ label: { className: "grow-0" } }}
-                                    />
-                                ))}
+                                {social.providers.map((...[p, , _providers]) => {
+                                    console.log(p);
+                                    return (
+                                        <Button
+                                            icon={p.iconClasses}
+                                            severity="danger"
+                                            type="button"
+                                            onClick={() => (window.location.href = p.loginUrl)}
+                                            key={p.alias}
+                                            id={`social-${p.alias}`}
+                                            className="basis-2/5 shrink-0 grow text-[rgb(100,116,139)] justify-center"
+                                            label={kcSanitize(p.displayName)}
+                                            text
+                                            raised
+                                            iconPos="left"
+                                            pt={{ label: { className: "grow-0" } }}
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
                 </>
             }
         >
-            <div id="kc-form">
+            <div id="kc-form" className="pt-0.5">
                 <div id="kc-form-wrapper">
                     {realm.password && (
                         <form
@@ -101,7 +104,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             method="post"
                         >
                             {!usernameHidden && (
-                                <FloatLabel className={kcClsx("kcFormGroupClass")}>
+                                <FloatLabel>
                                     <label htmlFor="username" className="translate-y-px">
                                         {!realm.loginWithEmailAllowed
                                             ? msg("username")
@@ -151,7 +154,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     />
                                     <Button
                                         // className="p-inputgroup-addon"
-                                        severity="info"
                                         icon={"pi " + (isPasswordRevealed ? "pi-eye-slash" : "pi-eye")}
                                         onClick={toggleIsPasswordRevealed}
                                         type="button"

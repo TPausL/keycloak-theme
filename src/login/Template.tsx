@@ -9,6 +9,7 @@ import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import { Dropdown } from "primereact/dropdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { Message } from "primereact/message";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -61,10 +62,25 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         );
     };
 
+    const convertToSeverity = (type: string) => {
+        switch (type) {
+            case "success":
+                return "success";
+            case "error":
+                return "error";
+            case "warning":
+                return "warn";
+            case "info":
+                return "info";
+            default:
+                return "";
+        }
+    };
+
     return (
         <div className={kcClsx("kcLoginClass")}>
             <div id="kc-header" className={kcClsx("kcHeaderClass")}>
-                <div id="kc-header-wrapper" className={kcClsx("kcHeaderWrapperClass")}>
+                <div id="kc-header-wrapper" className={"font-extrabold !capitalize"}>
                     {msg("loginTitleHtml", realm.displayNameHtml)}
                 </div>
             </div>
@@ -126,26 +142,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     <div id="kc-content-wrapper">
                         {/* App-initiated actions should not see warning messages about the need to complete the action during login. */}
                         {displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction) && (
-                            <div
-                                className={clsx(
-                                    `alert-${message.type}`,
-                                    kcClsx("kcAlertClass"),
-                                    `pf-m-${message?.type === "error" ? "danger" : message.type}`
-                                )}
-                            >
-                                <div className="pf-c-alert__icon">
-                                    {message.type === "success" && <span className={kcClsx("kcFeedbackSuccessIcon")}></span>}
-                                    {message.type === "warning" && <span className={kcClsx("kcFeedbackWarningIcon")}></span>}
-                                    {message.type === "error" && <span className={kcClsx("kcFeedbackErrorIcon")}></span>}
-                                    {message.type === "info" && <span className={kcClsx("kcFeedbackInfoIcon")}></span>}
-                                </div>
-                                <span
-                                    className={kcClsx("kcAlertTitleClass")}
-                                    dangerouslySetInnerHTML={{
-                                        __html: kcSanitize(message.summary)
-                                    }}
-                                />
-                            </div>
+                            <Message text={kcSanitize(message.summary)} className="text-sm mb-4" severity={convertToSeverity(message.type)} />
                         )}
                         {children}
                         {auth !== undefined && auth.showTryAnotherWayLink && (

@@ -18,12 +18,15 @@
     "keywords": [],
     "dependencies": {
         "@fontsource/poppins": "^5.1.1",
+        "@tsparticles/engine": "^3.8.1",
+        "@tsparticles/react": "^3.0.0",
         "country-flag-icons": "^1.5.13",
         "keycloakify": "^11.7.1",
         "primeicons": "^7.0.0",
         "primereact": "^10.9.1",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "tsparticles": "^3.8.1"
     },
     "devDependencies": {
         "@eslint/js": "^9.15.0",

@@ -10,9 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
 
 import { FloatLabel } from "primereact/floatlabel";
-import "primereact/resources/primereact.css"; //core css
-import "primereact/resources/themes/lara-light-cyan/theme.css";
-import "primeicons/primeicons.css";
+
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
@@ -50,9 +48,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             infoNode={
                 <div id="kc-registration-container">
                     <div id="kc-registration">
-                        <span>
+                        <span className="text-[--secondary-400]">
                             {msg("noAccount")}{" "}
-                            <a tabIndex={8} href={url.registrationUrl}>
+                            <a tabIndex={8} href={url.registrationUrl} className="text-[--secondary-600] hover:!text-[--secondary-500]">
                                 {msg("doRegister")}
                             </a>
                         </span>
@@ -63,7 +61,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 <>
                     {realm.password && social?.providers !== undefined && social.providers.length !== 0 && (
                         <div id="kc-social-providers">
-                            <hr />
+                            <hr className="!border-t-[--secondary-400]" />
                             <h2 className="text-sm font-light text-center">{msg("identity-provider-login-label")}</h2>
                             <div className="flex w-full flex-wrap gap-3">
                                 {social.providers.map((...[p, , _providers]) => {
@@ -71,14 +69,13 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     return (
                                         <Button
                                             icon={p.iconClasses}
-                                            severity="danger"
+                                            severity="secondary"
                                             type="button"
                                             onClick={() => (window.location.href = p.loginUrl)}
                                             key={p.alias}
                                             id={`social-${p.alias}`}
-                                            className="basis-2/5 shrink-0 grow text-[rgb(100,116,139)] justify-center"
+                                            className="basis-2/5 shrink-0 grow text-gray-200 justify-center"
                                             label={kcSanitize(p.displayName)}
-                                            text
                                             raised
                                             iconPos="left"
                                             pt={{ label: { className: "grow-0" } }}
@@ -116,7 +113,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         tabIndex={2}
                                         id="username"
                                         name="username"
-                                        className="w-full p-inputtext-lg"
+                                        className="w-full text-lg text-gray-400"
                                         defaultValue={login.username ?? ""}
                                         type="text"
                                         autoFocus
@@ -143,7 +140,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 </label>
                                 <div className="p-inputgroup flex-1">
                                     <InputText
-                                        className="p-inputtext-lg"
+                                        className="text-lg text-gray-400"
                                         tabIndex={3}
                                         id="password"
                                         name="password"
@@ -157,6 +154,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         icon={"pi " + (isPasswordRevealed ? "pi-eye-slash" : "pi-eye")}
                                         onClick={toggleIsPasswordRevealed}
                                         type="button"
+                                        className="text-gray-200"
+                                        severity="secondary"
                                     />
                                 </div>
                                 {usernameHidden && messagesPerField.existsError("username", "password") && (
@@ -181,6 +180,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                 name="rememberMe"
                                                 checked={rememberMeChecked}
                                                 onChange={e => setRememberMeChecked(e.checked ?? false)}
+
                                                 //checked={!!login.rememberMe}
                                                 //defaultChecked={!!login.rememberMe}
                                             />
@@ -194,7 +194,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 <div className={kcClsx("kcFormOptionsWrapperClass")}>
                                     {realm.resetPasswordAllowed && (
                                         <span>
-                                            <a tabIndex={6} href={url.loginResetCredentialsUrl}>
+                                            <a
+                                                tabIndex={6}
+                                                href={url.loginResetCredentialsUrl}
+                                                className="text-[--secondary-600] hover:!text-[--secondary-500]"
+                                            >
                                                 {msg("doForgotPassword")}
                                             </a>
                                         </span>
@@ -210,9 +214,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     name="login"
                                     id="kc-login"
                                     type="submit"
-                                    className="w-full"
+                                    className="w-full text-gray-200"
                                     disabled={isLoginButtonDisabled}
                                     raised
+                                    severity="secondary"
                                     size="large"
                                 />
                             </div>

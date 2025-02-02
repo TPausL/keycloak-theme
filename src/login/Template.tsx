@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import type { TemplateProps } from "keycloakify/login/TemplateProps";
@@ -11,14 +11,145 @@ import { Dropdown } from "primereact/dropdown";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import { Message, MessageProps } from "primereact/message";
 import { useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
+import Particles, { IParticlesProps, initParticlesEngine } from "@tsparticles/react";
 import one from "./2.svg";
 import two from "./3.svg";
 import three from "./4.svg";
-// import { loadAll } from "@/tsparticles/all"; // if you are going to use `loadAll`, install the "@tsparticles/all" package too.
-// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 import { loadFull } from "tsparticles"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
-// import { loadBasic } from "@tsparticles/basic"; // if you are going to use `loadBasic`, install the "@tsparticles/basic" package too.
+
+import "primereact/resources/primereact.css"; //core css
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import "primeicons/primeicons.css";
+import "../theme.css";
+
+const particlesConfig: IParticlesProps["options"] = {
+    background: {
+        color: {
+            value: "#172b4d"
+        }
+    },
+    particles: {
+        number: {
+            value: 75,
+            density: {
+                enable: true
+            }
+        },
+        color: {
+            value: "#fb6340"
+        },
+        shape: {
+            type: "image",
+
+            options: {
+                image: [{ src: one }, { src: two }, { src: three }]
+            }
+        },
+        opacity: {
+            value: 0.5,
+
+            animation: {
+                enable: false,
+                speed: 1,
+
+                sync: false
+            }
+        },
+        size: {
+            value: {
+                min: 10,
+                max: 60
+            },
+            animation: {
+                enable: false,
+                speed: 2,
+                sync: false
+            }
+        },
+        links: {
+            enable: true,
+            distance: 250,
+            color: "#fb6340",
+            opacity: 0.4,
+            width: 2
+        },
+        move: {
+            enable: true,
+            speed: 1.5,
+            direction: "none",
+            random: true,
+            straight: false,
+            outModes: {
+                default: "out"
+            },
+            attract: {
+                enable: false,
+                rotate: {
+                    x: 600,
+                    y: 1200
+                }
+            }
+        }
+    },
+    interactivity: {
+        events: {
+            onHover: {
+                enable: true,
+                mode: "bubble"
+            },
+            onClick: {
+                enable: false,
+                mode: "bubble"
+            }
+        },
+        modes: {
+            grab: {
+                distance: 400,
+                links: {
+                    opacity: 1
+                }
+            },
+            bubble: {
+                distance: 400,
+                size: 90,
+                duration: 2,
+                opacity: 0.9,
+                speed: 1
+            },
+            repulse: {
+                distance: 150,
+                duration: 0.4
+            },
+            push: {
+                quantity: 4
+            },
+            remove: {
+                quantity: 2
+            }
+        }
+    },
+    detectRetina: true
+};
+
+const ParticlesContainer = memo(() => {
+    const [init, setInit] = useState(false);
+
+    // this should be run only once per application lifetime
+    useEffect(() => {
+        initParticlesEngine(async engine => {
+            // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
+            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+            // starting from v2 you can add only the features you need reducing the bundle size
+            //await loadAll(engine);
+            //await loadFull(engine);
+            await loadFull(engine);
+            //await loadBasic(engine);
+        }).then(() => {
+            setInit(true);
+        });
+    }, []);
+    return <> {init && <Particles id="tsparticles" className="absolute z-[-100]" options={particlesConfig} />}</>;
+});
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -36,23 +167,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         classes,
         children
     } = props;
-
-    const [init, setInit] = useState(false);
-
-    // this should be run only once per application lifetime
-    useEffect(() => {
-        initParticlesEngine(async engine => {
-            // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-            // starting from v2 you can add only the features you need reducing the bundle size
-            //await loadAll(engine);
-            //await loadFull(engine);
-            await loadFull(engine);
-            //await loadBasic(engine);
-        }).then(() => {
-            setInit(true);
-        });
-    }, []);
 
     const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
 
@@ -105,127 +219,14 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <>
-            {init && (
-                <Particles
-                    id="tsparticles"
-                    className="absolute z-[-100]"
-                    options={{
-                        background: {
-                            color: {
-                                value: "#172b4d"
-                            }
-                        },
-                        particles: {
-                            number: {
-                                value: 75,
-                                density: {
-                                    enable: true
-                                }
-                            },
-                            color: {
-                                value: "#fb6340"
-                            },
-                            shape: {
-                                type: "image",
-
-                                options: {
-                                    image: [{ src: one }, { src: two }, { src: three }]
-                                }
-                            },
-                            opacity: {
-                                value: 0.5,
-
-                                animation: {
-                                    enable: false,
-                                    speed: 1,
-
-                                    sync: false
-                                }
-                            },
-                            size: {
-                                value: {
-                                    min: 10,
-                                    max: 60
-                                },
-                                animation: {
-                                    enable: false,
-                                    speed: 2,
-                                    sync: false
-                                }
-                            },
-                            links: {
-                                enable: true,
-                                distance: 250,
-                                color: "#fb6340",
-                                opacity: 0.4,
-                                width: 2
-                            },
-                            move: {
-                                enable: true,
-                                speed: 1.5,
-                                direction: "none",
-                                random: true,
-                                straight: false,
-                                outModes: {
-                                    default: "out"
-                                },
-                                attract: {
-                                    enable: false,
-                                    rotate: {
-                                        x: 600,
-                                        y: 1200
-                                    }
-                                }
-                            }
-                        },
-                        interactivity: {
-                            events: {
-                                onHover: {
-                                    enable: true,
-                                    mode: "bubble"
-                                },
-                                onClick: {
-                                    enable: false,
-                                    mode: "bubble"
-                                }
-                            },
-                            modes: {
-                                grab: {
-                                    distance: 400,
-                                    links: {
-                                        opacity: 1
-                                    }
-                                },
-                                bubble: {
-                                    distance: 400,
-                                    size: 90,
-                                    duration: 2,
-                                    opacity: 0.9,
-                                    speed: 1
-                                },
-                                repulse: {
-                                    distance: 150,
-                                    duration: 0.4
-                                },
-                                push: {
-                                    quantity: 4
-                                },
-                                remove: {
-                                    quantity: 2
-                                }
-                            }
-                        },
-                        detectRetina: true
-                    }}
-                />
-            )}
+            <ParticlesContainer />
             <div className={kcClsx("kcLoginClass")}>
                 <div id="kc-header" className={kcClsx("kcHeaderClass")}>
                     <div id="kc-header-wrapper" className={"font-extrabold !capitalize"}>
                         {msg("loginTitleHtml", realm.displayNameHtml)}
                     </div>
                 </div>
-                <div className={kcClsx("kcFormCardClass") + " border-t-0 rounded-lg"}>
+                <div className={kcClsx("kcFormCardClass") + " border-t-0 rounded-lg bg-[linear-gradient(87deg,#fb6340,#fbb140)]"}>
                     <header className={kcClsx("kcFormHeaderClass")}>
                         {enabledLanguages.length > 1 && (
                             <div className={kcClsx("kcLocaleMainClass") + " mb-4"} id="kc-locale">
@@ -306,7 +307,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             {socialProvidersNode}
                             {displayInfo && (
                                 <div id="kc-info" className={kcClsx("kcSignUpClass")}>
-                                    <div id="kc-info-wrapper" className={kcClsx("kcInfoAreaWrapperClass") + " rounded-lg"}>
+                                    <div id="kc-info-wrapper" className={kcClsx("kcInfoAreaWrapperClass") + " rounded-lg + !bg-transparent"}>
                                         {infoNode}
                                     </div>
                                 </div>

@@ -54,10 +54,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         });
     }, []);
 
-    const particlesLoaded = container => {
-        console.log(container);
-    };
-
     const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
 
     const { msg, msgStr, currentLanguage, enabledLanguages } = i18n;
@@ -113,7 +109,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 <Particles
                     id="tsparticles"
                     className="absolute z-[-100]"
-                    particlesLoaded={particlesLoaded}
                     options={{
                         background: {
                             color: {
@@ -124,8 +119,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             number: {
                                 value: 75,
                                 density: {
-                                    enable: true,
-                                    area: 50
+                                    enable: true
                                 }
                             },
                             color: {
@@ -133,14 +127,14 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             },
                             shape: {
                                 type: "image",
-                                size: 15,
+
                                 options: {
                                     image: [{ src: one }, { src: two }, { src: three }]
                                 }
                             },
                             opacity: {
                                 value: 0.5,
-                                random: false,
+
                                 animation: {
                                     enable: false,
                                     speed: 1,
@@ -193,8 +187,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                 onClick: {
                                     enable: false,
                                     mode: "bubble"
-                                },
-                                resize: true
+                                }
                             },
                             modes: {
                                 grab: {

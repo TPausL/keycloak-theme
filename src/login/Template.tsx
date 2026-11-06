@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import type { TemplateProps } from "keycloakify/login/TemplateProps";
@@ -8,19 +8,137 @@ import { useInitialize } from "keycloakify/login/Template.useInitialize";
 import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import { Dropdown } from "primereact/dropdown";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import {
+    GB,
+    DE,
+    FR,
+    ES,
+    IT,
+    NL,
+    PL,
+    PT,
+    BR,
+    RU,
+    TR,
+    CZ,
+    DK,
+    GR,
+    FI,
+    HU,
+    JP,
+    KR,
+    LT,
+    LV,
+    NO,
+    RO,
+    SK,
+    SE,
+    UA,
+    CN,
+    TW,
+    SA,
+    TH,
+    IR,
+    GE,
+    US,
+    type FlagComponent
+} from "country-flag-icons/react/3x2";
 import { Message, MessageProps } from "primereact/message";
-import { useState } from "react";
 import Particles, { IParticlesProps, initParticlesEngine } from "@tsparticles/react";
 import one from "./2.svg";
 import two from "./3.svg";
 import three from "./4.svg";
-import { loadFull } from "tsparticles"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
+import { loadFull } from "tsparticles";
 
-import "primereact/resources/primereact.css"; //core css
-import "primereact/resources/themes/lara-light-cyan/theme.css";
+import "primereact/resources/primereact.css";
 import "primeicons/primeicons.css";
 import "../theme.css";
+
+const LANGUAGE_TO_COUNTRY: Record<string, string> = {
+    en: "GB",
+    de: "DE",
+    fr: "FR",
+    es: "ES",
+    it: "IT",
+    nl: "NL",
+    pl: "PL",
+    pt: "PT",
+    ru: "RU",
+    tr: "TR",
+    cs: "CZ",
+    da: "DK",
+    el: "GR",
+    fi: "FI",
+    hu: "HU",
+    ja: "JP",
+    ko: "KR",
+    lt: "LT",
+    lv: "LV",
+    no: "NO",
+    nb: "NO",
+    nn: "NO",
+    ro: "RO",
+    sk: "SK",
+    sv: "SE",
+    uk: "UA",
+    zh: "CN",
+    ar: "SA",
+    ca: "ES",
+    fa: "IR",
+    th: "TH",
+    ka: "GE"
+};
+
+function getCountryCode(languageTag: string): string {
+    const normalized = languageTag.replace("_", "-");
+    const parts = normalized.split("-");
+    const lang = parts[0].toLowerCase();
+    return parts.length > 1 && parts[1].length === 2 ? parts[1].toUpperCase() : LANGUAGE_TO_COUNTRY[lang] ?? lang.toUpperCase();
+}
+
+const FLAG_COMPONENTS: Record<string, FlagComponent> = {
+    GB,
+    DE,
+    FR,
+    ES,
+    IT,
+    NL,
+    PL,
+    PT,
+    BR,
+    RU,
+    TR,
+    CZ,
+    DK,
+    GR,
+    FI,
+    HU,
+    JP,
+    KR,
+    LT,
+    LV,
+    NO,
+    RO,
+    SK,
+    SE,
+    UA,
+    CN,
+    TW,
+    SA,
+    TH,
+    IR,
+    GE,
+    US
+};
+
+function FlagIcon({ languageTag }: { languageTag: string }) {
+    const code = getCountryCode(languageTag);
+    const Flag = FLAG_COMPONENTS[code];
+    if (!Flag) {
+        return <i className="pi pi-globe text-xs" aria-hidden="true" />;
+    }
+    return <Flag className="w-4 h-3 rounded-[2px] shadow-sm shrink-0 object-cover" aria-hidden="true" />;
+}
 
 const particlesConfig: IParticlesProps["options"] = {
     background: {
@@ -40,18 +158,15 @@ const particlesConfig: IParticlesProps["options"] = {
         },
         shape: {
             type: "image",
-
             options: {
                 image: [{ src: one }, { src: two }, { src: three }]
             }
         },
         opacity: {
             value: 0.5,
-
             animation: {
                 enable: false,
                 speed: 1,
-
                 sync: false
             }
         },
@@ -131,24 +246,17 @@ const particlesConfig: IParticlesProps["options"] = {
     detectRetina: true
 };
 
-const ParticlesContainer = memo(() => {
+const ParticlesContainer = memo(function ParticlesContainer() {
     const [init, setInit] = useState(false);
 
-    // this should be run only once per application lifetime
     useEffect(() => {
         initParticlesEngine(async engine => {
-            // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-            // starting from v2 you can add only the features you need reducing the bundle size
-            //await loadAll(engine);
-            //await loadFull(engine);
             await loadFull(engine);
-            //await loadBasic(engine);
         }).then(() => {
             setInit(true);
         });
     }, []);
-    return <> {init && <Particles id="tsparticles" className="absolute z-[-100]" options={particlesConfig} />}</>;
+    return <>{init && <Particles id="tsparticles" className="fixed inset-0 z-0" options={particlesConfig} />}</>;
 });
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
@@ -194,13 +302,17 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
         return null;
     }
 
-    const countryOptionTemplate = (option: { languageTag: string; label: string; href: string }) => {
+    const countryOptionTemplate = (option: { languageTag: string; label: string; href?: string }) => {
+        if (!option) return null;
         return (
-            <div className="flex align-items-center p-4">
-                <div>{getUnicodeFlagIcon(option.languageTag) + " " + option.label}</div>
+            <div className="flex items-center gap-2 text-xs font-medium">
+                <FlagIcon languageTag={option.languageTag} />
+                <span>{option.label}</span>
             </div>
         );
     };
+
+    const selectedLanguageOption = enabledLanguages.find(l => l.languageTag === currentLanguage.languageTag) ?? currentLanguage;
 
     const convertToSeverity = (type: string): MessageProps["severity"] => {
         switch (type) {
@@ -220,45 +332,67 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     return (
         <>
             <ParticlesContainer />
-            <div className={kcClsx("kcLoginClass")}>
+            <div className={clsx(kcClsx("kcLoginClass"), "relative z-10")}>
                 <div id="kc-header" className={kcClsx("kcHeaderClass")}>
-                    <div id="kc-header-wrapper" className={"font-extrabold !capitalize"}>
-                        {msg("loginTitleHtml", realm.displayNameHtml)}
+                    <div
+                        id="kc-header-wrapper"
+                        className={clsx(kcClsx("kcHeaderWrapperClass"), "font-extrabold !capitalize tracking-wide text-white drop-shadow-md")}
+                    >
+                        {msg("loginTitleHtml", realm.displayNameHtml.toUpperCase())}
                     </div>
                 </div>
-                <div className={kcClsx("kcFormCardClass") + " border-t-0 rounded-lg bg-[linear-gradient(87deg,#fb6340,#fbb140)]"}>
-                    <header className={kcClsx("kcFormHeaderClass")}>
-                        {enabledLanguages.length > 1 && (
-                            <div className={kcClsx("kcLocaleMainClass") + " mb-4"} id="kc-locale">
-                                <div id="kc-locale-wrapper" className={kcClsx("kcLocaleWrapperClass")}>
-                                    <Dropdown
-                                        itemTemplate={countryOptionTemplate}
-                                        value={""}
-                                        onChange={e => window.location.replace(e.value.href)}
-                                        options={enabledLanguages}
-                                        optionLabel="label"
-                                        placeholder={currentLanguage.label}
-                                        className=""
-                                        role="menu"
-                                        tabIndex={-1}
-                                        aria-labelledby="kc-current-locale-link"
-                                        aria-activedescendant=""
-                                        id="language-switch1"
-                                    />
-                                </div>
+                <div
+                    className={clsx(
+                        kcClsx("kcFormCardClass"),
+                        "relative !border-t-0 rounded-xl bg-[linear-gradient(87deg,#fb6340,#fbb140)] shadow-2xl px-8 py-8"
+                    )}
+                >
+                    {enabledLanguages.length > 1 && (
+                        <div className="flex justify-end -mt-2 mb-2" id="kc-locale">
+                            <div id="kc-locale-wrapper">
+                                <Dropdown
+                                    itemTemplate={countryOptionTemplate}
+                                    valueTemplate={() => countryOptionTemplate(currentLanguage)}
+                                    value={selectedLanguageOption}
+                                    onChange={e => {
+                                        if (e.value?.href) {
+                                            window.location.replace(e.value.href);
+                                        }
+                                    }}
+                                    options={enabledLanguages}
+                                    optionLabel="label"
+                                    placeholder={currentLanguage.label}
+                                    className="kc-locale-pill"
+                                    panelClassName="kc-locale-panel"
+                                    aria-label={msgStr("languages")}
+                                    id="language-switch1"
+                                />
                             </div>
-                        )}
+                        </div>
+                    )}
+                    <header className={clsx(kcClsx("kcFormHeaderClass"), "mb-5")}>
                         {(() => {
                             const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                                <h1 id="kc-page-title">{headerNode}</h1>
+                                <h1 id="kc-page-title" className="text-2xl font-bold text-[#172b4d] text-center m-0">
+                                    {headerNode}
+                                </h1>
                             ) : (
-                                <div id="kc-username" className={kcClsx("kcFormGroupClass")}>
-                                    <label id="kc-attempted-username">{auth.attemptedUsername}</label>
-                                    <a id="reset-login" href={url.loginRestartFlowUrl} aria-label={msgStr("restartLoginTooltip")}>
-                                        <div className="kc-login-tooltip">
-                                            <i className={kcClsx("kcResetFlowIcon")}></i>
-                                            <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
-                                        </div>
+                                <div
+                                    id="kc-username"
+                                    className="flex items-center justify-between gap-3 rounded-lg bg-[#243b67] border border-white/20 px-4 py-2.5 text-gray-100"
+                                >
+                                    <label id="kc-attempted-username" className="font-medium text-sm truncate m-0">
+                                        {auth.attemptedUsername}
+                                    </label>
+                                    <a
+                                        id="reset-login"
+                                        href={url.loginRestartFlowUrl}
+                                        aria-label={msgStr("restartLoginTooltip")}
+                                        title={msgStr("restartLoginTooltip")}
+                                        className="text-orange-400 hover:text-orange-300 transition-colors flex items-center gap-1.5 text-sm"
+                                    >
+                                        <i className="pi pi-refresh" aria-hidden="true"></i>
+                                        <span className="sr-only">{msg("restartLoginTooltip")}</span>
                                     </a>
                                 </div>
                             );
@@ -266,13 +400,13 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             if (displayRequiredFields) {
                                 return (
                                     <div className={kcClsx("kcContentWrapperClass")}>
-                                        <div className={clsx(kcClsx("kcLabelWrapperClass"), "subtitle")}>
+                                        <div className={clsx(kcClsx("kcLabelWrapperClass"), "subtitle text-[#172b4d] text-xs mb-1")}>
                                             <span className="subtitle">
-                                                <span className="required">*</span>
+                                                <span className="required text-red-900 font-bold mr-0.5">*</span>
                                                 {msg("requiredFields")}
                                             </span>
                                         </div>
-                                        <div className="col-md-10">{node}</div>
+                                        <div>{node}</div>
                                     </div>
                                 );
                             }
@@ -284,19 +418,24 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                         <div id="kc-content-wrapper">
                             {/* App-initiated actions should not see warning messages about the need to complete the action during login. */}
                             {displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction) && (
-                                <Message text={kcSanitize(message.summary)} className="text-sm mb-4" severity={convertToSeverity(message.type)} />
+                                <Message
+                                    text={<span dangerouslySetInnerHTML={{ __html: kcSanitize(message.summary) }} />}
+                                    className="w-full justify-start text-left text-sm mb-5"
+                                    severity={convertToSeverity(message.type)}
+                                />
                             )}
                             {children}
                             {auth !== undefined && auth.showTryAnotherWayLink && (
-                                <form id="kc-select-try-another-way-form" action={url.loginAction} method="post">
+                                <form id="kc-select-try-another-way-form" action={url.loginAction} method="post" className="mt-4 text-center">
                                     <div className={kcClsx("kcFormGroupClass")}>
                                         <input type="hidden" name="tryAnotherWay" value="on" />
                                         <a
                                             href="#"
                                             id="try-another-way"
-                                            onClick={() => {
+                                            className="text-sm font-semibold text-[#172b4d] underline underline-offset-4 hover:text-[#111827]"
+                                            onClick={e => {
+                                                e.preventDefault();
                                                 document.forms["kc-select-try-another-way-form" as never].submit();
-                                                return false;
                                             }}
                                         >
                                             {msg("doTryAnotherWay")}
@@ -306,8 +445,14 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             )}
                             {socialProvidersNode}
                             {displayInfo && (
-                                <div id="kc-info" className={kcClsx("kcSignUpClass")}>
-                                    <div id="kc-info-wrapper" className={kcClsx("kcInfoAreaWrapperClass") + " rounded-lg + !bg-transparent"}>
+                                <div id="kc-info" className={clsx(kcClsx("kcSignUpClass"), "mt-5")}>
+                                    <div
+                                        id="kc-info-wrapper"
+                                        className={clsx(
+                                            kcClsx("kcInfoAreaWrapperClass"),
+                                            "rounded-lg !bg-transparent !border-t border-[#172b4d]/20 !p-0 !pt-4 text-center"
+                                        )}
+                                    >
                                         {infoNode}
                                     </div>
                                 </div>

@@ -3,10 +3,340 @@
 @tailwind utilities;
 
 body {
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
-body.kcBodyClass {
-  background: none;
+html {
+    background-color: #172b4d;
 }
 
+body,
+body.kcBodyClass,
+.login-pf body {
+    background: transparent !important;
+}
+
+/* Override PatternFly's dynamically injected login.css card & footer rules */
+.login-pf-page .card-pf {
+    padding: 2rem 2.25rem !important;
+    border-top: 0 !important;
+    border-radius: 0.75rem !important;
+    max-width: 460px !important;
+    margin: 0 auto 2rem auto !important;
+    box-shadow:
+        0 20px 25px -5px rgba(10, 20, 40, 0.4),
+        0 8px 10px -6px rgba(10, 20, 40, 0.3) !important;
+}
+
+@media (max-width: 767px) {
+    .login-pf-page .card-pf {
+        padding: 1.5rem 1.25rem !important;
+        margin: 0 1rem 1.5rem 1rem !important;
+    }
+}
+
+#kc-header-wrapper {
+    padding: 2.25rem 1rem 1.25rem !important;
+    font-size: 1.75rem !important;
+    text-align: center !important;
+    color: #ffffff !important;
+}
+
+#kc-content-wrapper {
+    margin-top: 0 !important;
+}
+
+#kc-form-wrapper {
+    margin-top: 0 !important;
+}
+
+#kc-info {
+    margin: 1.5rem 0 0 0 !important;
+}
+
+#kc-info-wrapper {
+    padding: 1rem 0 0 0 !important;
+    background-color: transparent !important;
+    border-top: 1px solid rgba(23, 43, 77, 0.22) !important;
+    font-size: 0.875rem !important;
+}
+
+#kc-locale {
+    position: static !important;
+    width: auto !important;
+}
+
+/* Softer Navy (#243b67 / #1e355e) inputs & dropdowns instead of harsh #111827 black */
+.p-inputtext {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    color: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+.p-inputtext:enabled:hover {
+    border-color: #0f1d35 !important;
+}
+
+.p-inputtext:enabled:focus {
+    background: #1e355e !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35) !important;
+}
+
+.p-inputtext.p-invalid.p-component {
+    border-color: #fca5a5 !important;
+}
+
+/* Seamless Password input + reveal button inside inputgroup */
+.p-inputgroup > .p-float-label > .p-inputtext {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: 0 !important;
+}
+
+.p-inputgroup .p-button.p-button-secondary {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+.p-inputgroup .p-button.p-button-secondary:enabled:hover {
+    background: #1e355e !important;
+    color: #ffffff !important;
+}
+
+/* Compact pill-styled language dropdown */
+.p-dropdown.kc-locale-pill {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    border-radius: 9999px !important;
+    color: #f8fafc !important;
+    box-shadow: none !important;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.p-dropdown.kc-locale-pill:not(.p-disabled):hover {
+    background: #1e355e !important;
+    border-color: #0f1d35 !important;
+}
+
+.p-dropdown.kc-locale-pill:not(.p-disabled).p-focus {
+    background: #1e355e !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35) !important;
+}
+
+.p-dropdown.kc-locale-pill .p-dropdown-label,
+.p-dropdown.kc-locale-pill .p-dropdown-label.p-inputtext {
+    background: transparent !important;
+    border: 0 none !important;
+    box-shadow: none !important;
+    padding: 0.35rem 0.25rem 0.35rem 0.75rem !important;
+    color: #f8fafc !important;
+    font-weight: 500 !important;
+    font-size: 0.75rem !important;
+}
+
+.p-dropdown.kc-locale-pill .p-dropdown-trigger {
+    background: transparent !important;
+    width: 1.75rem !important;
+    color: #cbd5e1 !important;
+}
+
+.p-dropdown.kc-locale-pill .p-dropdown-trigger .p-icon {
+    width: 0.75rem !important;
+    height: 0.75rem !important;
+}
+
+.p-dropdown-panel.kc-locale-panel {
+    background: #1e355e !important;
+    border: 1px solid #172b4d !important;
+    border-radius: 0.625rem !important;
+    box-shadow: 0 10px 25px -5px rgba(10, 20, 40, 0.45) !important;
+    min-width: 145px !important;
+}
+
+.p-dropdown-panel.kc-locale-panel .p-dropdown-items {
+    padding: 0.35rem !important;
+}
+
+.p-dropdown-panel.kc-locale-panel .p-dropdown-items .p-dropdown-item {
+    color: #f1f5f9 !important;
+    padding: 0.45rem 0.65rem !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.75rem !important;
+}
+
+.p-dropdown-panel.kc-locale-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background: #fb6340 !important;
+    color: #172b4d !important;
+    font-weight: 600 !important;
+}
+
+.p-dropdown-panel.kc-locale-panel
+    .p-dropdown-items
+    .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Primary & social buttons in deep brand navy (#172b4d) so they stand out from inputs */
+.p-button.p-button-secondary:not(.p-inputgroup .p-button) {
+    background: #172b4d !important;
+    border-color: #172b4d !important;
+    color: #ffffff !important;
+}
+
+.p-button.p-button-secondary:not(.p-inputgroup .p-button):enabled:hover {
+    background: #1d3660 !important;
+    border-color: #1d3660 !important;
+}
+
+/* Ensure floated labels on the orange gradient card have space & high contrast */
+.p-float-label > label {
+    left: 0.75rem;
+    color: rgba(241, 245, 249, 0.78) !important;
+}
+
+.p-float-label > .p-inputtext:focus ~ label,
+.p-float-label > .p-inputtext.p-filled ~ label,
+.p-float-label > .p-inputtext:-webkit-autofill ~ label,
+.p-float-label > .p-inputwrapper-focus ~ label,
+.p-float-label > .p-inputwrapper-filled ~ label {
+    color: #172b4d !important;
+    font-weight: 600;
+    top: -0.65rem !important;
+}
+
+/* Soft navy checkbox on the orange card */
+.p-checkbox .p-checkbox-box {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    box-shadow: none !important;
+}
+
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
+    border-color: #172b4d !important;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox:not(.p-disabled):has(.p-checkbox-input:checked) .p-checkbox-box {
+    background: #172b4d !important;
+    border-color: #172b4d !important;
+    color: #fbb140 !important;
+}
+
+.p-checkbox .p-checkbox-box .p-checkbox-icon {
+    color: #fbb140 !important;
+}
+
+/* High-contrast PrimeReact inline messages in navy instead of black */
+.p-inline-message.p-inline-message-info {
+    background: rgba(30, 53, 94, 0.95) !important;
+    border-color: #60a5fa !important;
+    color: #dbeafe !important;
+}
+.p-inline-message.p-inline-message-info .p-inline-message-icon {
+    color: #93c5fd !important;
+}
+.p-inline-message.p-inline-message-success {
+    background: rgba(30, 53, 94, 0.95) !important;
+    border-color: #34d399 !important;
+    color: #d1fae5 !important;
+}
+.p-inline-message.p-inline-message-success .p-inline-message-icon {
+    color: #6ee7b7 !important;
+}
+.p-inline-message.p-inline-message-warn {
+    background: rgba(30, 53, 94, 0.95) !important;
+    border-color: #facc15 !important;
+    color: #fef08a !important;
+}
+.p-inline-message.p-inline-message-warn .p-inline-message-icon {
+    color: #fde047 !important;
+}
+.p-inline-message.p-inline-message-error {
+    background: rgba(30, 53, 94, 0.95) !important;
+    border-color: #f87171 !important;
+    color: #fee2e2 !important;
+}
+.p-inline-message.p-inline-message-error .p-inline-message-icon {
+    color: #fca5a5 !important;
+}
+
+/* Keep soft navy input background when browser autofills credentials */
+.p-inputtext:-webkit-autofill,
+.p-inputtext:-webkit-autofill:hover,
+.p-inputtext:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f8fafc;
+    -webkit-box-shadow: 0 0 0px 1000px #243b67 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Fallback styling for any remaining Keycloak DefaultPage templates */
+#kc-content-wrapper .pf-c-form-control {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    border-radius: 6px !important;
+    color: #f8fafc !important;
+    padding: 0.75rem 0.875rem !important;
+    height: auto !important;
+    box-shadow: none !important;
+}
+
+#kc-content-wrapper .pf-c-form-control:focus {
+    background: #1e355e !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35) !important;
+    outline: none !important;
+}
+
+#kc-content-wrapper .pf-c-button.pf-m-primary {
+    background: #172b4d !important;
+    border: 1px solid #172b4d !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.25rem !important;
+    background-image: none !important;
+    box-shadow:
+        0 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+#kc-content-wrapper .pf-c-button.pf-m-primary:hover {
+    background: #1d3660 !important;
+    border-color: #1d3660 !important;
+}
+
+#kc-content-wrapper .pf-c-button.pf-m-default {
+    background: #243b67 !important;
+    border: 1px solid #172b4d !important;
+    border-radius: 6px !important;
+    color: #f1f5f9 !important;
+    font-weight: 500 !important;
+    padding: 0.75rem 1.25rem !important;
+    background-image: none !important;
+}
+
+#kc-content-wrapper .pf-c-form__label,
+#kc-content-wrapper label.pf-c-form__label-text {
+    color: #172b4d !important;
+    font-weight: 600 !important;
+}
+
+#kc-content-wrapper .pf-c-form__helper-text.pf-m-error {
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    background: rgba(30, 53, 94, 0.95);
+    border: 1px solid rgba(252, 165, 165, 0.6);
+    color: #fee2e2 !important;
+    font-size: 0.75rem;
+}
